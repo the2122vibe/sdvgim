@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Персональный имидж — презентация</title>
+<style>
+  :root{
+    --blue:#1768d2;
+    --paper:#f4f5ef;
+    --ink:#1768d2;
+    --bg:#686a65;
+    --line:#1768d2;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Arial, Helvetica, sans-serif;
+    overflow-x:hidden;
+  }
+  .page{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:minmax(0,2fr) minmax(320px,1fr);
+    gap:0;
+    padding:26px;
+  }
+  .paper{
+    background:var(--paper);
+    min-height:calc(100vh - 52px);
+    padding:42px 48px 70px;
+    position:relative;
+    box-shadow:0 0 0 1px rgba(0,0,0,.03);
+  }
+  .paper:after{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border:1px solid rgba(23,104,210,.08);
+    pointer-events:none;
+  }
+  .right{
+    position:sticky;
+    top:26px;
+    height:calc(100vh - 52px);
+    overflow:hidden;
+    background:#dfe2dd;
+  }
+  .video-stage{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:none;
+    background:#dfe2dd;
+  }
+  video.active{display:block}
+  .visual{
+    width:100%;
+    height:100%;
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#dfe2dd;
+  }
+  .visual.hidden{display:none}
+  .visual-inner{
+    width:82%;
+    height:82%;
+    border:1px solid rgba(23,104,210,.16);
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .visual-inner:before,
+  .visual-inner:after{
+    content:"";
+    position:absolute;
+    border:1px solid rgba(23,104,210,.35);
+    border-radius:50%;
+    animation:float 6s ease-in-out infinite;
+  }
+  .visual-inner:before{width:45%;aspect-ratio:1}
+  .visual-inner:after{width:18%;aspect-ratio:1;animation-delay:-2s}
+  .shape{
+    position:absolute;
+    width:38%;
+    height:38%;
+    background:var(--blue);
+    opacity:.92;
+    transform:rotate(17deg);
+    animation:drift 7s ease-in-out infinite;
+  }
+  .visual-num{
+    position:absolute;
+    left:18px;
+    top:14px;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .visual-label{
+    position:absolute;
+    right:18px;
+    bottom:14px;
+    font-size:11px;
+    letter-spacing:.05em;
+  }
+  @keyframes drift{
+    0%,100%{transform:translate(-10%,-5%) rotate(17deg)}
+    50%{transform:translate(15%,12%) rotate(53deg)}
+  }
+  @keyframes float{
+    0%,100%{transform:scale(.85) translateY(0)}
+    50%{transform:scale(1.15) translateY(-20px)}
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid var(--line);
+    padding-bottom:10px;
+    margin-bottom:52px;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .brand{font-weight:700}
+  .counter{font-weight:700}
+  .eyebrow{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:18px;
+  }
+  h1{
+    margin:0 0 30px;
+    font-size:clamp(48px,6.5vw,104px);
+    line-height:.87;
+    letter-spacing:-.055em;
+    font-weight:700;
+    max-width:95%;
+  }
+  h2{
+    margin:0 0 30px;
+    font-size:clamp(42px,5vw,78px);
+    line-height:.9;
+    letter-spacing:-.05em;
+  }
+  .intro{
+    font-size:clamp(22px,2.1vw,34px);
+    line-height:1.08;
+    max-width:92%;
+    margin:0 0 36px;
+    font-weight:500;
+  }
+  .body{
+    font-size:clamp(18px,1.45vw,25px);
+    line-height:1.14;
+    max-width:94%;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px 34px;
+    margin-top:30px;
+  }
+  .item{
+    border-top:2px solid var(--line);
+    padding-top:10px;
+    font-size:clamp(17px,1.35vw,23px);
+    line-height:1.08;
+  }
+  .item:before{content:"— ";font-weight:700}
+  .formula{
+    margin-top:38px;
+    border-top:2px solid var(--line);
+    border-bottom:2px solid var(--line);
+    padding:20px 0;
+    font-size:clamp(21px,2vw,32px);
+    line-height:1.25;
+  }
+  .arrow{display:block;text-align:center;font-size:32px;line-height:.8}
+  .model{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    margin-top:26px;
+    border-top:2px solid var(--line);
+  }
+  .model div{
+    padding:14px 12px 14px 0;
+    border-bottom:1px solid rgba(23,104,210,.5);
+    font-size:clamp(16px,1.2vw,21px);
+  }
+  .model strong{display:block;font-size:.8em;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+  .questions{
+    margin-top:35px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .question{
+    border:2px solid var(--line);
+    padding:15px;
+    font-size:clamp(18px,1.6vw,26px);
+    line-height:1;
+  }
+  .flow{
+    margin-top:38px;
+    font-size:clamp(20px,2vw,31px);
+    line-height:1.12;
+  }
+  .flow .node{
+    padding:12px 0;
+    border-bottom:1px solid rgba(23,104,210,.5);
+  }
+  .flow .node:not(:last-child):after{
+    content:"↓";
+    display:block;
+    text-align:center;
+    margin-top:8px;
+    font-weight:700;
+  }
+  .foot{
+    position:absolute;
+    left:48px;
+    right:48px;
+    bottom:24px;
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+  .slides{display:block}
+  .slide{
+    min-height:calc(100vh - 52px);
+    padding-bottom:45px;
+    position:relative;
+    scroll-snap-align:start;
+  }
+  body{scroll-snap-type:y proximity}
+  .upload{
+    position:absolute;
+    z-index:10;
+    left:14px;
+    bottom:14px;
+    right:14px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .upload button{
+    border:1px solid var(--blue);
+    background:rgba(244,245,239,.9);
+    color:var(--blue);
+    padding:7px 9px;
+    font:11px Arial;
+    cursor:pointer;
+  }
+  .hint{
+    font-size:10px;
+    color:rgba(23,104,210,.75);
+    line-height:1.1;
+  }
+  @media(max-width:850px){
+    .page{grid-template-columns:1fr;padding:0}
+    .paper{min-height:auto;padding:30px 24px 70px}
+    .right{position:sticky;top:0;height:42vh;z-index:20}
+    .slide{min-height:100vh}
+    .foot{left:24px;right:24px}
+    .grid,.model,.questions{grid-template-columns:1fr}
+    .right{order:-1}
+    h1{font-size:62px}
+  }
+</style>
+</head>
+<body>
+
+<main id="deck">
+
+<section class="page slide" data-slide="1">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">01 / 10</span></div>
+    <div class="eyebrow">01 — Персональный имидж</div>
+    <h1>Персональный<br>имидж</h1>
+    <p class="intro">Комплексное явление, формирующееся в сознании окружающих.</p>
+    <div class="grid">
+      <div class="item">внешний вид и стиль</div>
+      <div class="item">поведение и манеры</div>
+      <div class="item">ценности и характер</div>
+      <div class="item">особенности коммуникации</div>
+    </div>
+    <div class="foot"><span>Social media / personal branding</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">01 / image</span><div class="shape"></div><span class="visual-label">identity / motion</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="2">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">02 / 10</span></div>
+    <div class="eyebrow">02 — Социальные сети</div>
+    <h2>Инструмент<br>имиджа</h2>
+    <p class="body">Социальные сети становятся средой формирования и поддержания персонального имиджа.</p>
+    <div class="grid">
+      <div class="item">контент</div><div class="item">визуальный образ</div>
+      <div class="item">коммуникация с аудиторией</div><div class="item">экспертные публикации</div>
+      <div class="item">взаимодействие с подписчиками</div>
+    </div>
+    <div class="foot"><span>02 — social environment</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">02 / feed</span><div class="shape"></div><span class="visual-label">content / audience</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="3">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">03 / 10</span></div>
+    <div class="eyebrow">03 — Самопрезентация</div>
+    <h2>Само-<br>презентация</h2>
+    <p class="body">Представление человеком собственного образа, направленное на создание определённого впечатления.</p>
+    <div class="formula">
+      В социальных сетях человек<br>самостоятельно выбирает:
+    </div>
+    <div class="grid">
+      <div class="item">что показывать</div><div class="item">как говорить</div>
+      <div class="item">какие темы освещать</div><div class="item">какие стороны личности раскрывать</div>
+    </div>
+    <div class="foot"><span>03 — self presentation</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">03 / self</span><div class="shape"></div><span class="visual-label">selection / framing</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="4">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">04 / 10</span></div>
+    <div class="eyebrow">04 — Модель А. Ю. Панасюка</div>
+    <h2>Из чего<br>складывается<br>имидж</h2>
+    <div class="model">
+      <div><strong>Габитарный</strong>внешность, одежда, стиль</div>
+      <div><strong>Кинетический</strong>мимика, жесты, поведение</div>
+      <div><strong>Вербальный</strong>речь и тексты</div>
+      <div><strong>Средовой</strong>окружение и пространство</div>
+      <div><strong>Овеществлённый</strong>результаты деятельности, продукты, проекты</div>
+    </div>
+    <p class="body" style="margin-top:25px">В социальных сетях все компоненты работают одновременно.</p>
+    <div class="foot"><span>04 — Panasyuk model</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">04 / system</span><div class="shape"></div><span class="visual-label">five dimensions</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="5">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">05 / 10</span></div>
+    <div class="eyebrow">05 — Позиционирование</div>
+    <h2>Понятный<br>образ</h2>
+    <p class="body">Позиционирование формирует понятный для аудитории образ человека.</p>
+    <div class="questions">
+      <div class="question">Кто я?</div>
+      <div class="question">Для кого я?</div>
+      <div class="question">Чем я отличаюсь?</div>
+      <div class="question">С чем меня должны ассоциировать?</div>
+    </div>
+    <p class="body" style="margin-top:30px">Социальные сети позволяют закреплять выбранное позиционирование через контент и коммуникацию.</p>
+    <div class="foot"><span>05 — positioning</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">05 / position</span><div class="shape"></div><span class="visual-label">who / for whom</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="6">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">06 / 10</span></div>
+    <div class="eyebrow">06 — Контент</div>
+    <h2>Контент<br>закрепляет<br>образ</h2>
+    <p class="body">Контент регулярно воспроизводит и закрепляет образ человека.</p>
+    <div class="grid">
+      <div class="item">темы публикаций</div><div class="item">визуальный стиль</div>
+      <div class="item">форматы</div><div class="item">tone of voice</div>
+      <div class="item">повторяющиеся смыслы</div><div class="item">характер взаимодействия с аудиторией</div>
+    </div>
+    <div class="foot"><span>06 — content system</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">06 / content</span><div class="shape"></div><span class="visual-label">repeat / reinforce</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="7">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">07 / 10</span></div>
+    <div class="eyebrow">07 — Персональный бренд</div>
+    <h2>Имидж →<br>бренд</h2>
+    <p class="body">Персональный брендинг связывает имидж с профессиональной деятельностью.</p>
+    <div class="formula">
+      Компетентность → контент → узнаваемость<br>
+      → доверие → профессиональные возможности
+    </div>
+    <p class="body" style="margin-top:28px">Социальные сети становятся инструментом демонстрации экспертизы, достижений, проектов и профессиональных ценностей.</p>
+    <div class="foot"><span>07 — personal brand</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">07 / work</span><div class="shape"></div><span class="visual-label">expertise / proof</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="8">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">08 / 10</span></div>
+    <div class="eyebrow">08 — Имидж и репутация</div>
+    <h2>Впечатление<br>и оценка</h2>
+    <div class="model">
+      <div><strong>Имидж</strong>создаваемое впечатление о человеке</div>
+      <div><strong>Репутация</strong>мнение и оценка, которые формируются на основе деятельности и поведения</div>
+    </div>
+    <div class="formula">
+      Имидж = как человек воспринимается.<br>
+      Репутация = как его оценивают.
+    </div>
+    <div class="foot"><span>08 — image / reputation</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">08 / perception</span><div class="shape"></div><span class="visual-label">impression / evaluation</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="9">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">09 / 10</span></div>
+    <div class="eyebrow">09 — Управление имиджем</div>
+    <h2>Цикл<br>корректировки</h2>
+    <div class="formula">
+      Контент → реакция аудитории → анализ<br>
+      → корректировка → новый контент
+    </div>
+    <p class="body" style="margin-top:30px">Изменяться могут:</p>
+    <div class="grid">
+      <div class="item">визуальный образ</div><div class="item">темы и форматы контента</div>
+      <div class="item">позиционирование</div><div class="item">стиль коммуникации</div>
+      <div class="item">способы взаимодействия с аудиторией</div>
+    </div>
+    <div class="foot"><span>09 — feedback loop</span><span>scroll →</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">09 / loop</span><div class="shape"></div><span class="visual-label">feedback / change</span></div></div></div></aside>
+</section>
+
+<section class="page slide" data-slide="10">
+  <article class="paper">
+    <div class="topbar"><span class="brand">Personal image / social media</span><span class="counter">10 / 10</span></div>
+    <div class="eyebrow">10 — Как работает продвижение</div>
+    <h2>От личности<br>к бренду</h2>
+    <div class="flow">
+      <div class="node">Личность</div>
+      <div class="node">Позиционирование</div>
+      <div class="node">Самопрезентация</div>
+      <div class="node">Контент и коммуникация</div>
+      <div class="node">Восприятие аудитории</div>
+      <div class="node">Имидж</div>
+      <div class="node">Репутация</div>
+      <div class="node">Персональный бренд</div>
+    </div>
+    <div class="foot"><span>10 — personal image system</span><span>end / ↑</span></div>
+  </article>
+  <aside class="right"><div class="video-stage"><div class="visual"><div class="visual-inner"><span class="visual-num">10 / identity</span><div class="shape"></div><span class="visual-label">person → brand</span></div></div></div></aside>
+</section>
+
+</main>
+
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const visuals = [...document.querySelectorAll('.visual')];
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const i = slides.indexOf(entry.target);
+      document.title = `Персональный имидж — ${String(i+1).padStart(2,'0')}/10`;
+      visuals.forEach((v,j)=>{
+        if(j===i){
+          v.classList.remove('hidden');
+          const shape=v.querySelector('.shape');
+          if(shape){
+            shape.style.animation = 'none';
+            void shape.offsetWidth;
+            shape.style.animation = '';
+          }
+        } else v.classList.add('hidden');
+      });
+    }
+  });
+},{threshold:.55});
+slides.forEach(s=>observer.observe(s));
+
+/* Keyboard navigation */
+window.addEventListener('keydown',(e)=>{
+  const active = slides.findIndex(s=>s.getBoundingClientRect().top >= -20 && s.getBoundingClientRect().top < window.innerHeight*.55);
+  if(e.key==='ArrowDown' || e.key==='PageDown'){
+    e.preventDefault();
+    slides[Math.min(slides.length-1, active+1)].scrollIntoView({behavior:'smooth'});
+  }
+  if(e.key==='ArrowUp' || e.key==='PageUp'){
+    e.preventDefault();
+    slides[Math.max(0, active-1)].scrollIntoView({behavior:'smooth'});
+  }
+});
+
+/*
+  VIDEO SYSTEM
+  Чтобы поставить реальные видео:
+  1. Откройте файл в редакторе.
+  2. Внутри нужного <aside class="right"> замените .visual на:
+     <video class="active" autoplay muted loop playsinline>
+       <source src="video1.mp4" type="video/mp4">
+     </video>
+  3. Для каждого слайда используйте своё видео.
+*/
+</script>
+</body>
+</html>
